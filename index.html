@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人萬能導航門戶 | LinkHub Pro (Auto-Save)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Noto Sans TC & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- QRCode.js CDN for dynamic QR Code generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 12s ease infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Common Utilities */
+        .glass-panel {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.7);
+        }
+
+        /* ================= Theme Definitions ================= */
+        /* Theme 1: Aurora 廣袤極光 */
+        body[data-theme="aurora"] {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #020617);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+            color: #f8fafc;
+        }
+        body[data-theme="aurora"] .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        body[data-theme="aurora"] .glass-card:hover {
+            border-color: rgba(129, 140, 248, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.25);
+        }
+
+        /* Theme 2: Twilight Lavender 薰衣草夜空 */
+        body[data-theme="lavender"] {
+            background: linear-gradient(-45deg, #180d2b, #2e1065, #3b0764, #111827);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+            color: #faf5ff;
+        }
+        body[data-theme="lavender"] .glass-card {
+            background: rgba(30, 16, 53, 0.65);
+            border: 1px solid rgba(216, 180, 254, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        body[data-theme="lavender"] .glass-card:hover {
+            border-color: rgba(216, 180, 254, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(192, 132, 252, 0.3);
+        }
+
+        /* Theme 3: Emerald Glass 翡翠水晶 */
+        body[data-theme="emerald"] {
+            background: linear-gradient(-45deg, #022c22, #064e3b, #0f4c3a, #020617);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+            color: #ecfdf5;
+        }
+        body[data-theme="emerald"] .glass-card {
+            background: rgba(6, 78, 59, 0.55);
+            border: 1px solid rgba(110, 231, 183, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+        body[data-theme="emerald"] .glass-card:hover {
+            border-color: rgba(52, 211, 153, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.25);
+        }
+
+        /* Theme 4: Sunset Glow 夕陽金黃 */
+        body[data-theme="sunset"] {
+            background: linear-gradient(-45deg, #2a0813, #431407, #361022, #0c0a09);
+            background-size: 400% 400%;
+            animation: gradient-x 15s ease infinite;
+            color: #fff7ed;
+        }
+        body[data-theme="sunset"] .glass-card {
+            background: rgba(67, 20, 7, 0.55);
+            border: 1px solid rgba(253, 186, 116, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        body[data-theme="sunset"] .glass-card:hover {
+            border-color: rgba(251, 146, 60, 0.5);
+            box-shadow: 0 12px 40px 0 rgba(249, 115, 22, 0.25);
+        }
+
+        /* Theme 5: Light Minimal 清爽極簡 */
+        body[data-theme="light-clean"] {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0, #f8fafc);
+            color: #0f172a;
+        }
+        body[data-theme="light-clean"] .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        body[data-theme="light-clean"] .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+        }
+    </style>
+</head>
+<body data-theme="aurora" class="min-h-full flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-white/10 transition-colors bg-black/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Brand & View Badge -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('public')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 animate-pulse-slow">
+                    <i class="fa-solid fa-compass text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-extrabold text-lg tracking-tight">LinkHub<span class="text-indigo-400">.tw</span></span>
+                        
+                        <!-- Auto-Save Real-time Status Badge -->
+                        <span id="autoSaveBadge" class="inline-flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-medium transition-all duration-300">
+                            <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i>
+                            <span>已自動儲存</span>
+                        </span>
+                    </div>
+                    <span id="currentModeBadge" class="hidden sm:inline-block text-xs text-indigo-300/80 font-semibold">公開導航主頁</span>
+                </div>
+            </div>
+
+            <!-- Header Buttons & Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                
+                <!-- Toggle View Mode Switch -->
+                <div class="bg-black/30 p-1 rounded-xl border border-white/10 flex items-center shadow-inner">
+                    <button id="btnNavPublic" onclick="switchView('public')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow">
+                        <i class="fa-solid fa-globe text-xs"></i>
+                        <span class="hidden md:inline">公開檢視</span>
+                    </button>
+                    <button id="btnNavAdmin" onclick="switchView('admin')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-sliders text-xs"></i>
+                        <span class="hidden md:inline">後台管理</span>
+                    </button>
+                </div>
+
+                <!-- Theme Selection Dropdown -->
+                <div class="relative">
+                    <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-black/30 border border-white/10 text-xs rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer appearance-none pr-7 font-medium">
+                        <option value="aurora" class="bg-slate-900 text-white">✨ 廣袤極光</option>
+                        <option value="lavender" class="bg-purple-950 text-purple-200">🌸 薰衣草夜空</option>
+                        <option value="emerald" class="bg-emerald-950 text-emerald-200">🌲 翡翠水晶</option>
+                        <option value="sunset" class="bg-amber-950 text-amber-200">🌅 夕陽金黃</option>
+                        <option value="light-clean" class="bg-slate-100 text-slate-900">☀️ 清爽極簡</option>
+                    </select>
+                    <i class="fa-solid fa-palette absolute right-2.5 top-2.5 text-xs pointer-events-none opacity-60"></i>
+                </div>
+
+                <!-- Share QR Code Quick Action -->
+                <button onclick="openGlobalQRCodeModal()" title="開啟分享 QR Code" class="p-2.5 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 transition text-xs font-semibold flex items-center space-x-1">
+                    <i class="fa-solid fa-qrcode text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= 1. PUBLIC VIEW (公開導航頁) ================= -->
+        <div id="publicView" class="space-y-8 max-w-2xl mx-auto">
+            
+            <!-- User Profile Card -->
+            <div id="publicProfileHeader" class="text-center space-y-4 py-2">
+                <!-- Dynamically rendered via JS -->
+            </div>
+
+            <!-- Search & Category Filters Bar -->
+            <div class="space-y-3">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-400 text-sm"></i>
+                    <input type="text" id="publicSearchInput" oninput="renderPublicView()" placeholder="搜尋連結標題、關鍵字、分類描述..." 
+                        class="w-full pl-11 pr-10 py-3 rounded-2xl bg-black/20 border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 outline-none transition text-sm backdrop-blur-md">
+                    <button onclick="clearSearch('publicSearchInput')" class="absolute right-3 top-3 text-gray-400 hover:text-white text-sm px-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Category Filters Horizontal Scroll Bar -->
+                <div id="publicCategoryFilters" class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                    <!-- Dynamic Filter Tabs -->
+                </div>
+            </div>
+
+            <!-- Pinned Featured Links -->
+            <div id="publicPinnedSection" class="space-y-3">
+                <!-- Dynamic Pinned Links Cards -->
+            </div>
+
+            <!-- Standard All Links List -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between text-xs font-bold tracking-wider text-gray-400 uppercase px-1">
+                    <span><i class="fa-solid fa-layer-group mr-1.5"></i>所有導航連結</span>
+                    <span id="publicLinkCount" class="bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full border border-indigo-500/30">0 個連結</span>
+                </div>
+                <div id="publicLinksList" class="space-y-3">
+                    <!-- Dynamic Links -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 2. ADMIN MANAGER VIEW (後台管理頁) ================= -->
+        <div id="adminView" class="hidden space-y-8">
+            
+            <!-- Dashboard Stats Overview -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-card p-4 sm:p-5 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-medium">總連結數量</div>
+                        <div id="statTotalLinks" class="text-2xl font-bold">0</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 sm:p-5 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fa-solid fa-arrow-pointer"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-medium">總點擊流量</div>
+                        <div id="statTotalClicks" class="text-2xl font-bold">0</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 sm:p-5 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fa-solid fa-folder-tree"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-medium">分類群組</div>
+                        <div id="statCategoriesCount" class="text-2xl font-bold">0</div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 sm:p-5 rounded-2xl flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fa-solid fa-thumbtack"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 font-medium">焦點置頂項</div>
+                        <div id="statPinnedLinks" class="text-2xl font-bold">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Sub-Navigation Tabs -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-3">
+                <div class="flex space-x-2 bg-black/30 p-1 rounded-xl border border-white/10 text-xs">
+                    <button id="adminTabLinks" onclick="switchAdminTab('links')" class="px-4 py-2 rounded-lg font-semibold bg-indigo-600 text-white shadow">
+                        <i class="fa-solid fa-list-check mr-1.5"></i>連結管理
+                    </button>
+                    <button id="adminTabProfile" onclick="switchAdminTab('profile')" class="px-4 py-2 rounded-lg font-semibold text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-id-card mr-1.5"></i>個人名片設定
+                    </button>
+                    <button id="adminTabAnalytics" onclick="switchAdminTab('analytics')" class="px-4 py-2 rounded-lg font-semibold text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-chart-line mr-1.5"></i>數據流量報表
+                    </button>
+                    <button id="adminTabSystem" onclick="switchAdminTab('system')" class="px-4 py-2 rounded-lg font-semibold text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-database mr-1.5"></i>備份與復原
+                    </button>
+                </div>
+
+                <button onclick="openLinkModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>新增連結</span>
+                </button>
+            </div>
+
+            <!-- ADMIN SECTION 1: Links Table -->
+            <div id="adminPanelLinks" class="space-y-4">
+                <div class="flex justify-between items-center gap-4 flex-wrap">
+                    <div class="relative flex-grow max-w-sm">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+                        <input type="text" id="adminSearchInput" oninput="renderAdminView()" placeholder="搜尋管理列表中的項目..." 
+                            class="w-full pl-9 pr-8 py-2 rounded-xl bg-black/20 border border-white/10 focus:border-indigo-500 outline-none text-xs">
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/10">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-black/30 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <th class="p-3.5">排序/項目名稱</th>
+                                    <th class="p-3.5">分類</th>
+                                    <th class="p-3.5">狀態標籤</th>
+                                    <th class="p-3.5 text-center">點擊數</th>
+                                    <th class="p-3.5 text-center">置頂狀態</th>
+                                    <th class="p-3.5 text-right">管理操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminLinksTableBody" class="divide-y divide-white/5 text-xs">
+                                <!-- Dynamic Render -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION 2: Profile Settings Form -->
+            <div id="adminPanelProfile" class="hidden glass-card rounded-2xl p-6 border border-white/10 max-w-2xl mx-auto space-y-6">
+                <div class="border-b border-white/10 pb-3 flex items-center justify-between">
+                    <h3 class="text-base font-bold flex items-center"><i class="fa-solid fa-user-gear mr-2 text-indigo-400"></i>編輯個人品牌資料</h3>
+                    <span class="text-xs text-emerald-400 flex items-center"><i class="fa-solid fa-bolt mr-1"></i>輸入時自動即時儲存</span>
+                </div>
+
+                <form id="profileForm" onsubmit="saveProfile(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">顯示名稱 / 姓名 *</label>
+                        <input type="text" id="profName" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">個人簡介 / Tagline</label>
+                        <textarea id="profTagline" rows="3" class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs resize-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">頭像類型</label>
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <label class="flex items-center space-x-2 p-2 rounded-xl bg-black/20 border border-white/10 cursor-pointer text-xs">
+                                <input type="radio" name="avatarType" value="image" id="avatarTypeImage" onchange="toggleAvatarInput()" class="accent-indigo-600">
+                                <span>圖片網址 (URL)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-2 rounded-xl bg-black/20 border border-white/10 cursor-pointer text-xs">
+                                <input type="radio" name="avatarType" value="emoji" id="avatarTypeEmoji" onchange="toggleAvatarInput()" class="accent-indigo-600">
+                                <span>大 Emoji 圖示</span>
+                            </label>
+                        </div>
+
+                        <div id="avatarImageGroup">
+                            <input type="url" id="profAvatar" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                        </div>
+                        <div id="avatarEmojiGroup" class="hidden">
+                            <input type="text" id="profEmoji" placeholder="🚀" class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                        </div>
+                    </div>
+
+                    <div class="border-t border-white/10 pt-4">
+                        <label class="block text-xs font-bold text-gray-200 uppercase mb-3">社群媒體連結快捷列</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-instagram w-6 text-center text-pink-400"></i>
+                                <input type="url" id="profSocialInstagram" placeholder="Instagram URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-youtube w-6 text-center text-red-500"></i>
+                                <input type="url" id="profSocialYoutube" placeholder="YouTube URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-github w-6 text-center text-gray-300"></i>
+                                <input type="url" id="profSocialGithub" placeholder="GitHub URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-threads w-6 text-center text-purple-400"></i>
+                                <input type="url" id="profSocialThreads" placeholder="Threads URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-facebook w-6 text-center text-blue-500"></i>
+                                <input type="url" id="profSocialFacebook" placeholder="Facebook URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-brands fa-line w-6 text-center text-emerald-400"></i>
+                                <input type="url" id="profSocialLine" placeholder="Line 社群/好友 URL" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                            <div class="flex items-center space-x-2 sm:col-span-2">
+                                <i class="fa-solid fa-envelope w-6 text-center text-amber-400"></i>
+                                <input type="text" id="profSocialEmail" placeholder="Email 信箱 (如 mailto:service@example.com)" class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/10 outline-none text-xs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-3">
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/30">
+                            立即儲存名片
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ADMIN SECTION 3: Analytics Report -->
+            <div id="adminPanelAnalytics" class="hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Top Clicked Links Ranking -->
+                    <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                        <h3 class="text-sm font-bold flex items-center justify-between">
+                            <span><i class="fa-solid fa-trophy mr-2 text-amber-400"></i>熱門點擊排行榜 Top 5</span>
+                            <span class="text-[10px] text-gray-400 font-normal">即時記錄</span>
+                        </h3>
+                        <div id="analyticsTopLinks" class="space-y-3">
+                            <!-- Dynamic Rankings -->
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+                        <h3 class="text-sm font-bold flex items-center justify-between">
+                            <span><i class="fa-solid fa-chart-pie mr-2 text-emerald-400"></i>分類分佈與點擊占比</span>
+                        </h3>
+                        <div id="analyticsCategoryList" class="space-y-3">
+                            <!-- Dynamic Categories Breakdown -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN SECTION 4: System Data Backup & Restore -->
+            <div id="adminPanelSystem" class="hidden glass-card rounded-2xl p-6 border border-white/10 max-w-2xl mx-auto space-y-6">
+                <div class="border-b border-white/10 pb-3">
+                    <h3 class="text-base font-bold flex items-center"><i class="fa-solid fa-database mr-2 text-indigo-400"></i>系統資料備份與還原</h3>
+                    <p class="text-xs text-gray-400 mt-1">匯出您的全站設定與連結點擊紀錄，或恢復至初始示範內容。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-black/20 border border-white/10 space-y-3">
+                        <div class="font-bold text-xs flex items-center text-indigo-300">
+                            <i class="fa-solid fa-file-export mr-2 text-base"></i>匯出設定檔 (JSON)
+                        </div>
+                        <p class="text-[11px] text-gray-400 leading-relaxed">下載備份檔，保存個人名片、所有連結項目及點擊數據統計。</p>
+                        <button onclick="exportData()" class="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition shadow">
+                            匯出 JSON 備份
+                        </button>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-black/20 border border-white/10 space-y-3">
+                        <div class="font-bold text-xs flex items-center text-emerald-300">
+                            <i class="fa-solid fa-file-import mr-2 text-base"></i>匯入設定檔 (JSON)
+                        </div>
+                        <p class="text-[11px] text-gray-400 leading-relaxed">選擇先前備份的 JSON 檔案，以覆蓋並復原目前的系統數據。</p>
+                        <label class="block w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow text-center cursor-pointer">
+                            <span>選擇 JSON 檔案匯入</span>
+                            <input type="file" id="importFileInput" accept=".json" onchange="importData(event)" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t border-white/10 pt-4 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-rose-400">重置為預設範例資料</div>
+                        <div class="text-[11px] text-gray-400">清除現有 LocalStorage 資料並還原為系統初次載入的範例。</div>
+                    </div>
+                    <button onclick="confirmResetData()" class="px-4 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-semibold transition">
+                        重置預設值
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Modal 1: Add/Edit Link Item -->
+    <div id="linkModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden">
+        <div class="glass-card max-w-lg w-full rounded-2xl p-6 space-y-5 border border-white/20 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <h3 id="linkModalTitle" class="text-base font-bold">新增導航連結</h3>
+                <button onclick="closeLinkModal()" class="text-gray-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <form id="linkForm" onsubmit="saveLink(event)" class="space-y-4">
+                <input type="hidden" id="linkId">
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">連結標題 *</label>
+                    <input type="text" id="linkTitle" required placeholder="例：個人 Notion 知識庫" 
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">目標網址 (URL) *</label>
+                    <input type="url" id="linkUrl" required placeholder="https://example.com" 
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">分類類別</label>
+                        <input type="text" id="linkCategory" list="categoryOptions" placeholder="專欄文章, 社群, 工作專案..." 
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                        <datalist id="categoryOptions"></datalist>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">圖示 (Emoji 或 FA Class)</label>
+                        <input type="text" id="linkIcon" placeholder="例如: 🚀 或 fa-solid fa-bookmark" 
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">簡短描述 / 副標題</label>
+                    <textarea id="linkSubtitle" rows="2" placeholder="說明此連結的內容重點..." 
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">亮點標籤 (Badge)</label>
+                        <input type="text" id="linkBadge" placeholder="例: 🔥 HOT, ✨ NEW, 推薦" 
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">標籤顏色主題</label>
+                        <select id="linkBadgeColor" class="w-full px-3.5 py-2.5 rounded-xl bg-black/30 border border-white/10 outline-none focus:border-indigo-500 text-xs cursor-pointer">
+                            <option value="rose" class="bg-slate-900 text-rose-400">🔥 火熱紅 (Rose)</option>
+                            <option value="amber" class="bg-slate-900 text-amber-400">✨ 亮金黃 (Amber)</option>
+                            <option value="emerald" class="bg-slate-900 text-emerald-400">💎 翡翠綠 (Emerald)</option>
+                            <option value="indigo" class="bg-slate-900 text-indigo-400">⚡ 寶石藍 (Indigo)</option>
+                            <option value="purple" class="bg-slate-900 text-purple-400">🌸 夢幻紫 (Purple)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="linkPinned" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 accent-indigo-600 cursor-pointer">
+                    <label for="linkPinned" class="text-xs font-semibold cursor-pointer">📌 設定為「焦點置頂」項目</label>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-white/10">
+                    <button type="button" onclick="closeLinkModal()" class="px-4 py-2 rounded-xl bg-black/20 hover:bg-white/10 text-xs font-semibold">取消</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30">儲存連結</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: QR Code Dynamic Sharing -->
+    <div id="qrModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden">
+        <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4 border border-white/20 shadow-2xl relative">
+            <button onclick="closeQRCodeModal()" class="absolute right-4 top-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+
+            <h3 id="qrModalTitle" class="text-base font-bold">掃描 QR Code 訪問</h3>
+            <p id="qrModalSubtitle" class="text-xs text-gray-400 break-all px-2"></p>
+
+            <div class="flex justify-center my-3 p-4 bg-white rounded-2xl shadow-inner inline-block mx-auto">
+                <div id="qrcodeContainer"></div>
+            </div>
+
+            <div class="flex items-center justify-center space-x-2 pt-1">
+                <button onclick="copyCurrentQRUrl()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center space-x-1.5 shadow">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>複製連結</span>
+                </button>
+                <button onclick="closeQRCodeModal()" class="px-4 py-2 rounded-xl bg-black/20 hover:bg-white/10 text-xs font-semibold">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Custom Alert / Confirmation Dialog -->
+    <div id="confirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden">
+        <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4 border border-white/20 shadow-2xl relative">
+            <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto text-xl border border-rose-500/30">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-base font-bold">確認此操作</h3>
+            <p id="confirmMessage" class="text-xs text-gray-300 leading-relaxed"></p>
+
+            <div class="flex items-center justify-center space-x-3 pt-2">
+                <button onclick="closeConfirmModal(false)" class="px-4 py-2 rounded-xl bg-black/20 hover:bg-white/10 text-xs font-semibold">取消</button>
+                <button id="confirmBtnAction" onclick="closeConfirmModal(true)" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow">確認執行</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Floating Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+    <script>
+        // ================= DEFAULT SAMPLE DATA (Traditional Chinese) =================
+        const DEFAULT_DATA = {
+            profile: {
+                name: "陳小明 (Alex Chen)",
+                tagline: "✨ 資深 UI/UX 全端工程師 & 數位游牧創作者 | 專注於 Web3、AI 應用與現代化網頁視覺設計 🚀",
+                avatarType: "image",
+                avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250",
+                avatarEmoji: "🚀",
+                socials: {
+                    instagram: "https://instagram.com",
+                    youtube: "https://youtube.com",
+                    github: "https://github.com",
+                    threads: "https://threads.net",
+                    facebook: "https://facebook.com",
+                    line: "https://line.me",
+                    email: "mailto:alex.chen@example.com"
+                }
+            },
+            settings: {
+                theme: "aurora",
+                activeView: "public"
+            },
+            links: [
+                {
+                    id: "link_1",
+                    title: "個人技術部落格 & 專欄文章",
+                    subtitle: "每週末更新 前端架構、AI 實戰工具與 數位游牧心得",
+                    url: "https://example.com/blog",
+                    category: "文章專欄",
+                    icon: "🚀",
+                    badge: "🔥 HOT",
+                    badgeColor: "rose",
+                    pinned: true,
+                    clicks: 482,
+                    createdAt: Date.now() - 86400000 * 20
+                },
+                {
+                    id: "link_2",
+                    title: "ChatGPT & Claude 高效 Prompt 提示詞庫",
+                    subtitle: "免費開源！精選 100+ 常用程式碼生成與文案撰寫提示詞",
+                    url: "https://chatgpt.com",
+                    category: "AI 精選工具",
+                    icon: "🤖",
+                    badge: "✨ NEW",
+                    badgeColor: "amber",
+                    pinned: true,
+                    clicks: 319,
+                    createdAt: Date.now() - 86400000 * 15
+                },
+                {
+                    id: "link_3",
+                    title: "YouTube 頻道 - Web 開發與實用教學",
+                    subtitle: "每週二五晚上 8 點線上直播，歡迎訂閱開啟小鈴鐺！",
+                    url: "https://youtube.com",
+                    category: "社群平台",
+                    icon: "fa-brands fa-youtube",
+                    badge: "推薦",
+                    badgeColor: "emerald",
+                    pinned: false,
+                    clicks: 254,
+                    createdAt: Date.now() - 86400000 * 12
+                },
+                {
+                    id: "link_4",
+                    title: "GitHub 開源專案彙整與代碼庫",
+                    subtitle: "包含所有前端元件庫、React 模板與 Tailwind UI 範例",
+                    url: "https://github.com",
+                    category: "開發者資源",
+                    icon: "fa-brands fa-github",
+                    badge: "開源",
+                    badgeColor: "indigo",
+                    pinned: false,
+                    clicks: 189,
+                    createdAt: Date.now() - 86400000 * 8
+                },
+                {
+                    id: "link_5",
+                    title: "LINE 交流討論群組 (免費加入)",
+                    subtitle: "與 2,000+ 位網頁開發者一起交流技術、分享接案經驗",
+                    url: "https://line.me",
+                    category: "社群平台",
+                    icon: "fa-brands fa-line",
+                    badge: "⚡ 限時",
+                    badgeColor: "purple",
+                    pinned: false,
+                    clicks: 142,
+                    createdAt: Date.now() - 86400000 * 3
+                }
+            ]
+        };
+
+        // App State
+        let appData = { ...DEFAULT_DATA };
+        let activeCategoryFilter = "全部";
+        let activeAdminTab = "links";
+        let currentQRUrl = "";
+        let pendingConfirmCallback = null;
+        let profileSaveDebounceTimer = null;
+
+        // LocalStorage & Real-time Auto-Save Engine
+        function loadData() {
+            try {
+                const stored = localStorage.getItem("linkhub_tw_data");
+                if (stored) {
+                    appData = JSON.parse(stored);
+                    if (!appData.profile) appData.profile = DEFAULT_DATA.profile;
+                    if (!appData.links) appData.links = DEFAULT_DATA.links;
+                    if (!appData.settings) appData.settings = DEFAULT_DATA.settings;
+                }
+            } catch (e) {
+                console.error("載入 LocalStorage 失敗:", e);
+                appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+            }
+        }
+
+        // Core Auto-Save Trigger function
+        function saveData(silent = false) {
+            try {
+                localStorage.setItem("linkhub_tw_data", JSON.stringify(appData));
+                triggerAutoSaveVisuals(silent);
+            } catch (e) {
+                console.error("自動儲存 LocalStorage 失敗:", e);
+                showToast("儲存失敗：LocalStorage 空間不足或遭禁用", "error");
+            }
+        }
+
+        // Visual feedback when Auto-Save completes
+        function triggerAutoSaveVisuals(silent = false) {
+            const badge = document.getElementById("autoSaveBadge");
+            if (badge) {
+                badge.classList.remove("bg-emerald-500/20", "text-emerald-300", "border-emerald-500/30");
+                badge.classList.add("bg-indigo-500/40", "text-white", "border-indigo-400", "scale-105");
+                
+                badge.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> <span>已自動儲存</span>`;
+
+                setTimeout(() => {
+                    badge.classList.remove("bg-indigo-500/40", "text-white", "border-indigo-400", "scale-105");
+                    badge.classList.add("bg-emerald-500/20", "text-emerald-300", "border-emerald-500/30");
+                    badge.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> <span>已自動儲存</span>`;
+                }, 1000);
+            }
+
+            if (!silent) {
+                showToast("資料已自動儲存至 LocalStorage！", "success");
+            }
+        }
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            
+            const typeStyles = {
+                success: 'bg-emerald-950/90 text-emerald-200 border-emerald-500/40',
+                error: 'bg-rose-950/90 text-rose-200 border-rose-500/40',
+                info: 'bg-indigo-950/90 text-indigo-200 border-indigo-500/40'
+            };
+
+            const iconStyles = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-circle-xmark text-rose-400',
+                info: 'fa-circle-info text-indigo-400'
+            };
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl text-xs font-bold shadow-2xl border backdrop-blur-md flex items-center space-x-2 transition-all transform translate-y-2 opacity-0 ${typeStyles[type] || typeStyles.info}`;
+            toast.innerHTML = `<i class="fa-solid ${iconStyles[type] || iconStyles.info}"></i> <span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove("translate-y-2", "opacity-0");
+            });
+
+            setTimeout(() => {
+                toast.classList.add("opacity-0", "translate-y-2");
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function renderIcon(iconStr, fallback = 'fa-solid fa-link') {
+            if (!iconStr) return `<i class="${fallback}"></i>`;
+            if (iconStr.startsWith('fa-') || iconStr.includes('fa ')) {
+                return `<i class="${escapeHtml(iconStr)}"></i>`;
+            }
+            return `<span class="text-base">${escapeHtml(iconStr)}</span>`;
+        }
+
+        // Theme Changer with Auto-Save
+        function changeTheme(themeName) {
+            appData.settings.theme = themeName;
+            document.body.setAttribute("data-theme", themeName);
+            saveData(false);
+        }
+
+        // View Mode Switcher
+        function switchView(mode) {
+            appData.settings.activeView = mode;
+            saveData(true); // silent save
+
+            const publicView = document.getElementById("publicView");
+            const adminView = document.getElementById("adminView");
+            const btnPublic = document.getElementById("btnNavPublic");
+            const btnAdmin = document.getElementById("btnNavAdmin");
+            const badge = document.getElementById("currentModeBadge");
+
+            if (mode === 'admin') {
+                publicView.classList.add("hidden");
+                adminView.classList.remove("hidden");
+                btnAdmin.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow";
+                btnPublic.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition-all flex items-center space-x-1.5";
+                badge.innerText = "後台管理模式";
+                renderAdminView();
+            } else {
+                adminView.classList.add("hidden");
+                publicView.classList.remove("hidden");
+                btnPublic.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 bg-indigo-600 text-white shadow";
+                btnAdmin.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition-all flex items-center space-x-1.5";
+                badge.innerText = "公開導航主頁";
+                renderPublicView();
+            }
+        }
+
+        function clearSearch(inputId) {
+            document.getElementById(inputId).value = "";
+            if (inputId === 'publicSearchInput') renderPublicView();
+            else renderAdminView();
+        }
+
+        // ================= RENDER PUBLIC VIEW =================
+        function renderPublicView() {
+            renderPublicHeader();
+            renderPublicCategoryTabs();
+            renderPublicLinksList();
+        }
+
+        function renderPublicHeader() {
+            const container = document.getElementById("publicProfileHeader");
+            const p = appData.profile;
+
+            let avatarHtml = "";
+            if (p.avatarType === 'emoji') {
+                avatarHtml = `<div class="w-24 h-24 rounded-full bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border-2 border-indigo-400/40 flex items-center justify-center text-4xl shadow-xl mx-auto flex-shrink-0 animate-float">${p.avatarEmoji || '🚀'}</div>`;
+            } else {
+                avatarHtml = `<img src="${escapeHtml(p.avatarUrl)}" alt="${escapeHtml(p.name)}" class="w-24 h-24 rounded-full object-cover border-2 border-indigo-400/40 shadow-xl mx-auto flex-shrink-0 animate-float" onerror="this.src='https://placehold.co/150?text=User'">`;
+            }
+
+            // Social Buttons Render
+            let socialsHtml = "";
+            const s = p.socials || {};
+            const socialIcons = [
+                { key: 'instagram', icon: 'fa-brands fa-instagram', name: 'Instagram', color: 'hover:text-pink-400' },
+                { key: 'youtube', icon: 'fa-brands fa-youtube', name: 'YouTube', color: 'hover:text-red-400' },
+                { key: 'github', icon: 'fa-brands fa-github', name: 'GitHub', color: 'hover:text-gray-200' },
+                { key: 'threads', icon: 'fa-brands fa-threads', name: 'Threads', color: 'hover:text-purple-300' },
+                { key: 'facebook', icon: 'fa-brands fa-facebook', name: 'Facebook', color: 'hover:text-blue-400' },
+                { key: 'line', icon: 'fa-brands fa-line', name: 'LINE', color: 'hover:text-emerald-400' },
+                { key: 'email', icon: 'fa-solid fa-envelope', name: 'Email 信箱', color: 'hover:text-amber-300' }
+            ];
+
+            socialIcons.forEach(item => {
+                if (s[item.key]) {
+                    socialsHtml += `<a href="${escapeHtml(s[item.key])}" target="_blank" class="p-2.5 rounded-xl bg-black/20 hover:bg-white/10 border border-white/10 transition text-gray-300 ${item.color}" title="${item.name}"><i class="${item.icon} text-lg"></i></a>`;
+                }
+            });
+
+            container.innerHTML = `
+                <div class="relative inline-block">
+                    ${avatarHtml}
+                    <button onclick="copyShareProfile()" title="複製公開頁面連結" class="absolute bottom-0 right-0 p-2 rounded-full bg-indigo-600 text-white shadow-lg text-xs hover:bg-indigo-500 transition">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight">${escapeHtml(p.name)}</h1>
+                    <p class="text-xs sm:text-sm text-gray-300/80 max-w-lg mx-auto mt-2 leading-relaxed font-normal">${escapeHtml(p.tagline)}</p>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    ${socialsHtml}
+                </div>
+            `;
+        }
+
+        function renderPublicCategoryTabs() {
+            const container = document.getElementById("publicCategoryFilters");
+            const categories = ["全部", ...new Set(appData.links.map(l => l.category).filter(Boolean))];
+
+            container.innerHTML = categories.map(cat => {
+                const isActive = activeCategoryFilter === cat;
+                return `
+                    <button onclick="setCategoryFilter('${escapeHtml(cat)}')" 
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                            isActive 
+                                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' 
+                                : 'bg-black/20 hover:bg-white/10 text-gray-300 border border-white/10'
+                        }">
+                        ${escapeHtml(cat)}
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function setCategoryFilter(cat) {
+            activeCategoryFilter = cat;
+            renderPublicView();
+        }
+
+        function renderPublicLinksList() {
+            const searchQuery = (document.getElementById("publicSearchInput").value || "").toLowerCase().trim();
+            const pinnedContainer = document.getElementById("publicPinnedSection");
+            const linksContainer = document.getElementById("publicLinksList");
+            const countBadge = document.getElementById("publicLinkCount");
+
+            // Filter logic
+            let filtered = appData.links.filter(link => {
+                const matchesCategory = activeCategoryFilter === "全部" || link.category === activeCategoryFilter;
+                const matchesSearch = !searchQuery || 
+                    link.title.toLowerCase().includes(searchQuery) ||
+                    (link.subtitle && link.subtitle.toLowerCase().includes(searchQuery)) ||
+                    (link.category && link.category.toLowerCase().includes(searchQuery));
+                return matchesCategory && matchesSearch;
+            });
+
+            countBadge.innerText = `${filtered.length} 個連結`;
+
+            const pinnedLinks = filtered.filter(l => l.pinned);
+            const standardLinks = filtered.filter(l => !l.pinned);
+
+            // Render Pinned Links Section
+            if (pinnedLinks.length > 0) {
+                pinnedContainer.innerHTML = `
+                    <div class="flex items-center space-x-1.5 text-xs font-bold tracking-wider text-amber-400 uppercase mb-2 px-1">
+                        <i class="fa-solid fa-thumbtack"></i>
+                        <span>焦點精選推介</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${pinnedLinks.map(link => renderLinkCardHtml(link, true)).join("")}
+                    </div>
+                `;
+                pinnedContainer.classList.remove("hidden");
+            } else {
+                pinnedContainer.classList.add("hidden");
+                pinnedContainer.innerHTML = "";
+            }
+
+            // Render Standard Links
+            if (standardLinks.length === 0 && pinnedLinks.length === 0) {
+                linksContainer.innerHTML = `
+                    <div class="text-center py-12 glass-card rounded-2xl border border-dashed border-white/10 space-y-3">
+                        <i class="fa-solid fa-link-slash text-3xl text-gray-500"></i>
+                        <p class="text-sm font-semibold text-gray-400">未找到符合條件的導航連結</p>
+                        <p class="text-xs text-gray-500">請嘗試調整搜尋關鍵字或分類標籤。</p>
+                    </div>
+                `;
+            } else {
+                linksContainer.innerHTML = standardLinks.map(link => renderLinkCardHtml(link, false)).join("");
+            }
+        }
+
+        // Card HTML Generator
+        function renderLinkCardHtml(link, isPinned = false) {
+            const badgeColorMap = {
+                rose: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+                amber: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                emerald: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                indigo: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+                purple: 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+            };
+
+            const badgeStyle = badgeColorMap[link.badgeColor] || badgeColorMap.indigo;
+            const badgeHtml = link.badge ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold border ${badgeStyle}">${escapeHtml(link.badge)}</span>` : '';
+
+            return `
+                <div class="glass-card rounded-2xl p-4 flex flex-col justify-between space-y-3 group hover:scale-[1.01] transition duration-200">
+                    <div class="flex items-start justify-between space-x-3">
+                        <div class="flex items-start space-x-3.5">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-indigo-400 text-lg flex-shrink-0 group-hover:scale-105 transition">
+                                ${renderIcon(link.icon)}
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2 flex-wrap">
+                                    <h3 class="font-bold text-sm tracking-tight group-hover:text-indigo-300 transition">
+                                        ${escapeHtml(link.title)}
+                                    </h3>
+                                    ${isPinned ? '<i class="fa-solid fa-thumbtack text-xs text-amber-400" title="置頂項目"></i>' : ''}
+                                    ${badgeHtml}
+                                </div>
+                                <p class="text-xs text-gray-400 line-clamp-2 mt-1 leading-relaxed">${escapeHtml(link.subtitle || '點擊以開啟此導航連結網址。')}</p>
+                            </div>
+                        </div>
+
+                        <!-- Card Action Tools -->
+                        <div class="flex items-center space-x-1 flex-shrink-0">
+                            <button onclick="openSingleQR('${escapeHtml(link.url)}', '${escapeHtml(link.title)}')" title="顯示動態 QR Code" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition text-xs">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </button>
+                            <button onclick="copyToClipboard('${escapeHtml(link.url)}')" title="複製網址" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition text-xs">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+                        <div class="flex items-center space-x-2 text-[11px] text-gray-400">
+                            <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/10">${escapeHtml(link.category || '未分類')}</span>
+                            <span><i class="fa-solid fa-eye text-[10px] mr-1"></i>${link.clicks || 0} 次點擊</span>
+                        </div>
+                        
+                        <button onclick="handleLinkClick('${escapeHtml(link.id)}', '${escapeHtml(link.url)}')" class="px-4 py-1.5 rounded-xl bg-indigo-600/90 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center space-x-1.5 shadow">
+                            <span>前往訪問</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleLinkClick(id, url) {
+            const linkObj = appData.links.find(l => l.id === id);
+            if (linkObj) {
+                linkObj.clicks = (linkObj.clicks || 0) + 1;
+                saveData(true); // Silent real-time auto-save
+            }
+            window.open(url, '_blank');
+            if (appData.settings.activeView === 'public') renderPublicView();
+            else renderAdminView();
+        }
+
+        // ================= RENDER ADMIN MANAGER VIEW =================
+        function switchAdminTab(tab) {
+            activeAdminTab = tab;
+            const tabs = ['links', 'profile', 'analytics', 'system'];
+            
+            tabs.forEach(t => {
+                const btn = document.getElementById(`adminTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                const panel = document.getElementById(`adminPanel${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (t === tab) {
+                    btn.className = "px-4 py-2 rounded-lg font-semibold bg-indigo-600 text-white shadow";
+                    panel.classList.remove("hidden");
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg font-semibold text-gray-300 hover:text-white";
+                    panel.classList.add("hidden");
+                }
+            });
+
+            if (tab === 'analytics') renderAnalyticsReport();
+        }
+
+        function renderAdminView() {
+            // Stats Overview
+            const totalLinks = appData.links.length;
+            const totalClicks = appData.links.reduce((acc, l) => acc + (l.clicks || 0), 0);
+            const categoriesCount = new Set(appData.links.map(l => l.category).filter(Boolean)).size;
+            const pinnedCount = appData.links.filter(l => l.pinned).length;
+
+            document.getElementById("statTotalLinks").innerText = totalLinks;
+            document.getElementById("statTotalClicks").innerText = totalClicks;
+            document.getElementById("statCategoriesCount").innerText = categoriesCount;
+            document.getElementById("statPinnedLinks").innerText = pinnedCount;
+
+            // Datalist Options Update
+            const datalist = document.getElementById("categoryOptions");
+            datalist.innerHTML = Array.from(new Set(appData.links.map(l => l.category).filter(Boolean)))
+                .map(cat => `<option value="${escapeHtml(cat)}">`).join("");
+
+            // Render Links Table
+            const searchQuery = (document.getElementById("adminSearchInput").value || "").toLowerCase().trim();
+            const tableBody = document.getElementById("adminLinksTableBody");
+
+            let filtered = appData.links.filter(l => 
+                !searchQuery || 
+                l.title.toLowerCase().includes(searchQuery) || 
+                l.url.toLowerCase().includes(searchQuery) ||
+                (l.category && l.category.toLowerCase().includes(searchQuery))
+            );
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-8 text-gray-500 text-xs">
+                            尚未建立任何連結或查無符合條件的項目。點擊「新增連結」開始建立。
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map((link) => `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="p-3.5">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex flex-col space-y-1">
+                                <button onclick="moveLinkOrder('${escapeHtml(link.id)}', -1)" title="上移" class="text-gray-400 hover:text-white text-[10px]"><i class="fa-solid fa-chevron-up"></i></button>
+                                <button onclick="moveLinkOrder('${escapeHtml(link.id)}', 1)" title="下移" class="text-gray-400 hover:text-white text-[10px]"><i class="fa-solid fa-chevron-down"></i></button>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs flex-shrink-0">
+                                ${renderIcon(link.icon)}
+                            </div>
+                            <div class="min-w-0 max-w-xs">
+                                <div class="font-bold text-xs truncate">${escapeHtml(link.title)}</div>
+                                <a href="${escapeHtml(link.url)}" target="_blank" class="text-[11px] text-indigo-400 hover:underline truncate block">${escapeHtml(link.url)}</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-3.5">
+                        <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-medium">
+                            ${escapeHtml(link.category || '未分類')}
+                        </span>
+                    </td>
+                    <td class="p-3.5">
+                        ${link.badge ? `<span class="text-[10px] px-2 py-0.5 rounded font-bold bg-white/10">${escapeHtml(link.badge)}</span>` : '<span class="text-gray-500">-</span>'}
+                    </td>
+                    <td class="p-3.5 text-center font-bold text-xs">
+                        ${link.clicks || 0}
+                    </td>
+                    <td class="p-3.5 text-center">
+                        <button onclick="togglePinStatus('${escapeHtml(link.id)}')" class="px-2 py-1 rounded-lg text-[11px] font-semibold ${link.pinned ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-white/5 text-gray-500'}">
+                            <i class="fa-solid fa-thumbtack mr-1"></i>${link.pinned ? '已置頂' : '一般'}
+                        </button>
+                    </td>
+                    <td class="p-3.5 text-right">
+                        <div class="flex items-center justify-end space-x-2">
+                            <button onclick="editLink('${escapeHtml(link.id)}')" title="編輯項目" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteLink('${escapeHtml(link.id)}')" title="刪除項目" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
+
+            // Pre-fill Profile Form Fields
+            const p = appData.profile;
+            document.getElementById("profName").value = p.name || "";
+            document.getElementById("profTagline").value = p.tagline || "";
+            document.getElementById("profAvatar").value = p.avatarUrl || "";
+            document.getElementById("profEmoji").value = p.avatarEmoji || "🚀";
+
+            if (p.avatarType === 'emoji') {
+                document.getElementById("avatarTypeEmoji").checked = true;
+            } else {
+                document.getElementById("avatarTypeImage").checked = true;
+            }
+            toggleAvatarInput();
+
+            const s = p.socials || {};
+            document.getElementById("profSocialInstagram").value = s.instagram || "";
+            document.getElementById("profSocialYoutube").value = s.youtube || "";
+            document.getElementById("profSocialGithub").value = s.github || "";
+            document.getElementById("profSocialThreads").value = s.threads || "";
+            document.getElementById("profSocialFacebook").value = s.facebook || "";
+            document.getElementById("profSocialLine").value = s.line || "";
+            document.getElementById("profSocialEmail").value = s.email || "";
+        }
+
+        // Move link up or down in array with Auto-Save
+        function moveLinkOrder(id, direction) {
+            const index = appData.links.findIndex(l => l.id === id);
+            if (index === -1) return;
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= appData.links.length) return;
+
+            const temp = appData.links[index];
+            appData.links[index] = appData.links[targetIndex];
+            appData.links[targetIndex] = temp;
+
+            saveData(false);
+            renderAdminView();
+            renderPublicView();
+        }
+
+        // Link Actions with Auto-Save
+        function openLinkModal(linkId = null) {
+            const modal = document.getElementById("linkModal");
+            const form = document.getElementById("linkForm");
+            const modalTitle = document.getElementById("linkModalTitle");
+
+            form.reset();
+            document.getElementById("linkId").value = "";
+
+            if (linkId) {
+                const link = appData.links.find(l => l.id === linkId);
+                if (link) {
+                    modalTitle.innerText = "編輯導航連結";
+                    document.getElementById("linkId").value = link.id;
+                    document.getElementById("linkTitle").value = link.title;
+                    document.getElementById("linkUrl").value = link.url;
+                    document.getElementById("linkCategory").value = link.category || "";
+                    document.getElementById("linkIcon").value = link.icon || "";
+                    document.getElementById("linkSubtitle").value = link.subtitle || "";
+                    document.getElementById("linkBadge").value = link.badge || "";
+                    document.getElementById("linkBadgeColor").value = link.badgeColor || "indigo";
+                    document.getElementById("linkPinned").checked = !!link.pinned;
+                }
+            } else {
+                modalTitle.innerText = "新增導航連結";
+            }
+
+            modal.classList.remove("hidden");
+        }
+
+        function closeLinkModal() {
+            document.getElementById("linkModal").classList.add("hidden");
+        }
+
+        function saveLink(event) {
+            event.preventDefault();
+            const id = document.getElementById("linkId").value;
+            const title = document.getElementById("linkTitle").value.trim();
+            const url = document.getElementById("linkUrl").value.trim();
+            const category = document.getElementById("linkCategory").value.trim() || "一般";
+            const icon = document.getElementById("linkIcon").value.trim();
+            const subtitle = document.getElementById("linkSubtitle").value.trim();
+            const badge = document.getElementById("linkBadge").value.trim();
+            const badgeColor = document.getElementById("linkBadgeColor").value;
+            const pinned = document.getElementById("linkPinned").checked;
+
+            if (id) {
+                const idx = appData.links.findIndex(l => l.id === id);
+                if (idx !== -1) {
+                    appData.links[idx] = {
+                        ...appData.links[idx],
+                        title, url, category, icon, subtitle, badge, badgeColor, pinned
+                    };
+                }
+            } else {
+                const newLink = {
+                    id: "link_" + Date.now(),
+                    title, url, category, icon, subtitle, badge, badgeColor, pinned,
+                    clicks: 0,
+                    createdAt: Date.now()
+                };
+                appData.links.unshift(newLink);
+            }
+
+            saveData(false); // Triggers LocalStorage save + Toast
+            closeLinkModal();
+            renderAdminView();
+            renderPublicView();
+        }
+
+        function editLink(id) {
+            openLinkModal(id);
+        }
+
+        function deleteLink(id) {
+            showConfirmModal("確定要刪除此連結嗎？", "刪除後將無法恢復此項目的點擊紀錄與資料。", () => {
+                appData.links = appData.links.filter(l => l.id !== id);
+                saveData(false); // Triggers LocalStorage save
+                renderAdminView();
+                renderPublicView();
+            });
+        }
+
+        function togglePinStatus(id) {
+            const link = appData.links.find(l => l.id === id);
+            if (link) {
+                link.pinned = !link.pinned;
+                saveData(false); // Triggers LocalStorage save
+                renderAdminView();
+                renderPublicView();
+            }
+        }
+
+        function renderAnalyticsReport() {
+            const totalClicks = appData.links.reduce((acc, l) => acc + (l.clicks || 0), 0) || 1;
+            
+            // Top 5 clicked links
+            const topLinksContainer = document.getElementById("analyticsTopLinks");
+            const sortedLinks = [...appData.links].sort((a, b) => (b.clicks || 0) - (a.clicks || 0)).slice(0, 5);
+
+            topLinksContainer.innerHTML = sortedLinks.map((link, i) => {
+                const percent = Math.round(((link.clicks || 0) / totalClicks) * 100);
+                return `
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-bold flex items-center space-x-2">
+                                <span class="w-5 h-5 rounded-full ${i === 0 ? 'bg-amber-500 text-slate-950' : 'bg-white/10 text-gray-300'} flex items-center justify-center text-[10px]">${i + 1}</span>
+                                <span>${escapeHtml(link.title)}</span>
+                            </span>
+                            <span class="text-gray-400">${link.clicks || 0} 次 (${percent}%)</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-black/30 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            // Category Breakdown
+            const categoryContainer = document.getElementById("analyticsCategoryList");
+            const categoryMap = {};
+            appData.links.forEach(l => {
+                const cat = l.category || '未分類';
+                categoryMap[cat] = (categoryMap[cat] || 0) + (l.clicks || 0);
+            });
+
+            categoryContainer.innerHTML = Object.entries(categoryMap).map(([cat, clicks]) => {
+                const percent = Math.round((clicks / totalClicks) * 100);
+                return `
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-semibold text-gray-300">${escapeHtml(cat)}</span>
+                            <span class="text-gray-400">${clicks} 次點擊 (${percent}%)</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-black/30 overflow-hidden">
+                            <div class="h-full bg-emerald-500 rounded-full" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // Profile Form Real-Time Auto-Save Logic
+        function toggleAvatarInput() {
+            const isEmoji = document.getElementById("avatarTypeEmoji").checked;
+            if (isEmoji) {
+                document.getElementById("avatarImageGroup").classList.add("hidden");
+                document.getElementById("avatarEmojiGroup").classList.remove("hidden");
+            } else {
+                document.getElementById("avatarImageGroup").classList.remove("hidden");
+                document.getElementById("avatarEmojiGroup").classList.add("hidden");
+            }
+            triggerProfileAutoSave();
+        }
+
+        function triggerProfileAutoSave() {
+            const avatarType = document.querySelector('input[name="avatarType"]:checked')?.value || 'image';
+
+            appData.profile = {
+                name: document.getElementById("profName").value.trim(),
+                tagline: document.getElementById("profTagline").value.trim(),
+                avatarType,
+                avatarUrl: document.getElementById("profAvatar").value.trim(),
+                avatarEmoji: document.getElementById("profEmoji").value.trim(),
+                socials: {
+                    instagram: document.getElementById("profSocialInstagram").value.trim(),
+                    youtube: document.getElementById("profSocialYoutube").value.trim(),
+                    github: document.getElementById("profSocialGithub").value.trim(),
+                    threads: document.getElementById("profSocialThreads").value.trim(),
+                    facebook: document.getElementById("profSocialFacebook").value.trim(),
+                    line: document.getElementById("profSocialLine").value.trim(),
+                    email: document.getElementById("profSocialEmail").value.trim(),
+                }
+            };
+
+            saveData(true); // Silent save while typing
+            renderPublicHeader();
+        }
+
+        function saveProfile(event) {
+            if (event) event.preventDefault();
+            triggerProfileAutoSave();
+            saveData(false); // Explicit toast feedback
+            renderPublicView();
+        }
+
+        // Attach Debounced Auto-Save Listeners to Profile Inputs
+        function initProfileFormListeners() {
+            const inputs = document.querySelectorAll('#profileForm input, #profileForm textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    clearTimeout(profileSaveDebounceTimer);
+                    profileSaveDebounceTimer = setTimeout(() => {
+                        triggerProfileAutoSave();
+                    }, 400); // 400ms debounce for silky smooth auto-save
+                });
+            });
+        }
+
+        // QR Code & Copying Functions
+        function openGlobalQRCodeModal() {
+            openSingleQR(window.location.href, "個人萬能導航主頁");
+        }
+
+        function openSingleQR(url, title) {
+            currentQRUrl = url;
+            document.getElementById("qrModalTitle").innerText = "掃描 QR Code 訪問";
+            document.getElementById("qrModalSubtitle").innerText = title || url;
+
+            const container = document.getElementById("qrcodeContainer");
+            container.innerHTML = "";
+
+            new QRCode(container, {
+                text: url,
+                width: 180,
+                height: 180,
+                colorDark: "#020617",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById("qrModal").classList.remove("hidden");
+        }
+
+        function closeQRCodeModal() {
+            document.getElementById("qrModal").classList.add("hidden");
+        }
+
+        function copyCurrentQRUrl() {
+            copyToClipboard(currentQRUrl || window.location.href);
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("已複製網址至剪貼簿！", "success");
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast("已複製網址至剪貼簿！", "success");
+        }
+
+        function copyShareProfile() {
+            copyToClipboard(window.location.href);
+        }
+
+        // Custom Confirm Dialog Modal
+        function showConfirmModal(title, message, callback) {
+            document.getElementById("confirmTitle").innerText = title;
+            document.getElementById("confirmMessage").innerText = message;
+            pendingConfirmCallback = callback;
+            document.getElementById("confirmModal").classList.remove("hidden");
+        }
+
+        function closeConfirmModal(isConfirmed) {
+            document.getElementById("confirmModal").classList.add("hidden");
+            if (isConfirmed && typeof pendingConfirmCallback === 'function') {
+                pendingConfirmCallback();
+            }
+            pendingConfirmCallback = null;
+        }
+
+        // Import / Export JSON
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `linkhub_backup_${new Date().toISOString().slice(0, 10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("JSON 備份檔已成功匯出！", "success");
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && (imported.links || imported.profile)) {
+                        appData = {
+                            profile: imported.profile || appData.profile,
+                            settings: imported.settings || appData.settings,
+                            links: imported.links || appData.links
+                        };
+                        saveData(false); // Triggers LocalStorage save
+                        changeTheme(appData.settings.theme || 'aurora');
+                        renderAdminView();
+                        renderPublicView();
+                        showToast("JSON 數據已匯入並寫入 LocalStorage！", "success");
+                    } else {
+                        showToast("無效的備份檔案格式", "error");
+                    }
+                } catch (err) {
+                    console.error("匯入失敗:", err);
+                    showToast("解析 JSON 檔案失敗", "error");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function confirmResetData() {
+            showConfirmModal("確認要重置為預設資料嗎？", "此操作將清除 LocalStorage 中目前的變更並還原為範例資料。", () => {
+                appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+                saveData(false); // Save reset state to LocalStorage
+                changeTheme(appData.settings.theme);
+                renderAdminView();
+                renderPublicView();
+                showToast("已成功重置並寫入預設 LocalStorage 資料！", "success");
+            });
+        }
+
+        // Initialization
+        window.onload = function() {
+            loadData();
+            initProfileFormListeners();
+
+            // Apply Saved Theme
+            const savedTheme = appData.settings.theme || 'aurora';
+            document.body.setAttribute("data-theme", savedTheme);
+            document.getElementById("themeSelector").value = savedTheme;
+
+            // Apply Saved View Mode
+            const initialView = appData.settings.activeView || 'public';
+            switchView(initialView);
+        };
+    </script>
+</body>
+</html>
